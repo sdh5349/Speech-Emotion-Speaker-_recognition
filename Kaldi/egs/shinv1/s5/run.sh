@@ -15,38 +15,74 @@
 
 . ./path.sh || exit 1
 
+#tool이나 src 그리고 데이터의 경로등 저장해논 스크립트 불러옴 
+#kaldi를 돌리기위해 필요한 스크립트나 디렉토리 경로들 다있다고 보면된다.
+
+
 # If you have cluster of machines running GridEngine you may want to
 # change the train and decode commands in the file below
 . ./cmd.sh || exit 1
+#---------- 설명 -------------
+#cmd는 훈련과 디코딩을 위한 병렬화를 지정가능 
+#run.pl, queue.pl 그리고 slurm.pl 세 가지 옵션이 있다.
+#run.pl -> 로컬 컴퓨터(ex: 개인컴퓨터)에서 실행가능
+#queue.pl -> Sun Grid Engine을 사용하여 시스템에 작업을 할당가능
+#slurm.pl -> SLURM이라는 Grid Engine 소프트웨어를 사용하여 시스템에 작업을 할당가능
+
 
 # The number of parallel jobs to be started for some parts of the recipe
 # Make sure you have enough resources(CPUs and RAM) to accomodate this number of jobs
-njobs=8
+njobs=8  
+#---------- 설명 -------------
+#병렬작업수 설정 컴퓨팅파워에 맞춰서 정해줘야한다.
+
 
 # This recipe can select subsets of VoxForge's data based on the "Pronunciation dialect"
 # field in VF's etc/README files. To select all dialects, set this to "English"
 dialects="((base)|(noise)|(ward)|(etc)|(korean))"
+#---------- 설명 -------------
+#자신이 가지고 있는 음성 데이터의 디렉토리에는 etc/README 파일이 있는데 이 파일은 음성 데이터에 대한 설명이 적혀있다.
+#README 파일에 적혀 있는 설명중 어떤 언어로 되어 있는지를 확인한 후 입력 
 
 
 # The number of randomly selected speakers to be put in the test set
 nspk_test=50
+#---------- 설명 -------------
+#test 화자의 숫자 설정 가지고 있는 음성데이터에 맞춰서 설정하면된다.
+
 
 # Test-time language model order
 lm_order=2
+#---------- 설명 -------------
+#language model의 order를 정함
 
-#export nj=10
+
+
 # Word position dependent phones?
 pos_dep_phones=true
+#---------- 설명 -------------
+#phone이 단어의 위치에 영향을 받는지
+
+
 
 # The directory below will be used to link to a subset of the user directories
 # based on various criteria(currently just speaker's accent)
 selected=${DATA_ROOT}/selected
+#---------- 설명 -------------
+#selected라는 변수를 설정하는데 여기서 ${DATA_ROOT}는 가지고 있는 음성데이터의 위치
+#나중에 ${DATA_ROOT}/selected 경로에 사용할 음성데이터의 링크 만들어진다. 
+
+
 
 # The user of this script could change some of the above parameters. Example:
 # /bin/bash run.sh --pos-dep-phones false
 . utils/parse_options.sh || exit 1
+#사용할 파라미터를 설정하는 스크립트 
+
 
 [[ $# -ge 1 ]] && { echo "Unexpected arguments"; exit 1; }
+# $# --> 받는 arguement   ge --> >=  
+
 
 # Select a subset of the data to use
 # WARNING: the destination directory will be deleted if it already exists!
@@ -56,8 +92,15 @@ selected=${DATA_ROOT}/selected
 
 local/voxforge_select.sh --dialect $dialects \
   ${DATA_ROOT}  ${selected} || exit 1
+#---------- 설명 -------------
+#가지고 있는 전체 데이터중 사용할 데이터를 선택하는 스크립트
+#필요한 argument는 3가지  
+#$dialects --> 위에서 설정한 사용할 음성파일의 특징 ex) korean, base 등등
+#${DATA_ROOT} --> 음성 데이터의 디렉토리 경로 
+#${selected} --> 전체 음성 데이터에서 원하는 데이터를 가져올때 저장할 디렉토리 경로 
 
-
+# ${DATA_ROOT}(전체데이터 디렉토리경로)  에서 $dialects(원하는 언어(조건))에 해당하는 데이터를
+# ${selected}(선택한 데이터 저장할 디렉토리 경로)에 저장한다.
 
 
 # Mapping the anonymous speakers to unique IDs
