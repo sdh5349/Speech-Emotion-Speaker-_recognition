@@ -136,11 +136,31 @@ local/voxforge_data_prep.sh --nspk_test ${nspk_test} ${selected} || exit 1
 # Prepare ARPA LM and vocabulary using SRILM
 local/voxforge_prepare_lm.sh --order ${lm_order} || exit 1
 #---------- 설명 -------------
+#SRILM을 사용하여 language model을 준비
+#SRILM은 주로 음성 인식, 통계 태그 지정 및 분할, 기계 번역에 사용하기 위한 통계 언어 모델(LM)을 구축하고 적용하기 위한 툴킷
+#필요한 argument 한 가지
+#${lm_order} --> language model의 order 우리는 2라고 설정
+
+#이 스크립트에서 하는것(조금 더 보충해야할듯..아직 잘 모르겠음) 
+#1. 바로 앞단계에서 만들어준 trans.txt를 이용해 utt.txt파일과 corpus.txt파일을 만든다. (각각 test와 train의 발언만 담긴 파일) 
+#2. vocab-full.txt(모든 말)파일도 만들고  그리고 corpus.txt를 이용해 lm.arpa(언어 모델 파일)파일을 만들어준다. 
+
+
 
 
 # Prepare the lexicon and various phone lists
 # Pronunciations for OOV words are obtained using a pre-trained Sequitur model
 local/voxforge_prepare_dict.sh || exit 1
+#---------- 설명 -------------
+#lexicon 과 다양한 음소 list를 준비
+#미리 훈련시킨 Sequitur model을 사용해서 oov word들의 발음을 얻는다.
+#필요한 arguement 0
+
+#이 스크립트에서 하는것
+#1. cumdict를 다운로드 한다.
+#The Carnegie Mellon University Pronouncing Dictionary은 
+#134,000개 이상의 단어와 그 발음을 포함하고 있는 북미 영어용 오픈 소스 기계 판독이 가능한 발음 사전이다.
+#2. cumdict를 이요해 cmudict-plain.txt(영어 발음사전)를 만든다.
 
 
 # Prepare data/lang and data/local/lang directories
