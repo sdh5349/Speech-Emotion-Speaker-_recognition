@@ -51,7 +51,7 @@ selected=${DATA_ROOT}/selected
 # Select a subset of the data to use
 # WARNING: the destination directory will be deleted if it already exists!
 
-:<<"END"
+
 
 
 local/voxforge_select.sh --dialect $dialects \
@@ -232,29 +232,13 @@ done
 
 local/run_sgmm2.sh --nj $njobs
 
-#END
+
 
 
 echo "run_sgmm2.sh finish"
-#END
 
 
 
-
-
-
-
-
-
-
-
-#local/chain/run_tdnn.sh
-
-
-
-
-#:<<"END"
-#########
 
 steps/train_sat.sh --cmd "$train_cmd"  \
   2500 15000 data/train data/lang exp/tri3b_ali exp/tri4a || exit 1;
@@ -269,7 +253,7 @@ steps/decode_fmllr.sh --cmd "$decode_cmd" --nj 10 --config conf/decode.config \
 steps/align_fmllr.sh  --cmd "$train_cmd" --nj 10 \
   data/train data/lang exp/tri4a exp/tri4a_ali
 
-#######
+
 
 
 steps/train_sat.sh --cmd "$train_cmd" \
@@ -284,19 +268,16 @@ steps/decode_fmllr.sh --cmd "$decode_cmd" --nj 10 --config conf/decode.config \
 steps/align_fmllr.sh --cmd "$train_cmd" --nj 10 \
   data/train data/lang exp/tri5a exp/tri5a_ali || exit 1;
 
-:<<"END"
-END
-#:<<"END"
+
 
 #rm -rf ./data/train_sp*
+#rm -rf ./exp/nnet*
 
 local/chain/run_tdnn.sh
 
 echo "finish!!!!"
 
-#exit 0
 
-#local2/run_nnet2.sh
 
-END
+
 
