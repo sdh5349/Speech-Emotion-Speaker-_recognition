@@ -94,7 +94,7 @@ local/voxforge_select.sh --dialect $dialects \
   ${DATA_ROOT}  ${selected} || exit 1
 #---------- 설명 -------------
 #가지고 있는 전체 데이터중 사용할 데이터를 선택하는 스크립트
-#필요한 argument는 3가지  
+#필요한 argument는 세 가지  
 #$dialects --> 위에서 설정한 사용할 음성파일의 특징 ex) korean, base 등등
 #${DATA_ROOT} --> 음성 데이터의 디렉토리 경로 
 #${selected} --> 전체 음성 데이터에서 원하는 데이터를 가져올때 저장할 디렉토리 경로 
@@ -105,12 +105,38 @@ local/voxforge_select.sh --dialect $dialects \
 
 # Mapping the anonymous speakers to unique IDs
 local/voxforge_map_anonymous.sh ${selected} || exit 1
+#---------- 설명 -------------
+#음성데이터에 어떤 화자가 이 발언을 했는지 정보가 잇는데 이 정보들이 없는 음성데이터를 특정한 ID로 매핑하는 스크립트
+#필요한 arguement 한 가지
+#${selected} --> 전체 음성 데이터에서 원하는 데이터를 가져올때 저장할 디렉토리 경로 
+
+#화자의 정보가 없는 음성데이터들을 특정한 ID로 매핑해 ${selected}에 저장
+
 
 # Initial normalization of the data
 local/voxforge_data_prep.sh --nspk_test ${nspk_test} ${selected} || exit 1
+#---------- 설명 -------------
+#데이터들을 훈련에 사용할수 있게 정규화 해주는 스크립트
+#필요한 arguement 두 가지
+#${nspk_test} --> 테스트 화자의 수
+#${selected} --> 전체 음성 데이터에서 원하는 데이터를 가져올때 저장할 디렉토리 경로 
+
+#이 스크립트에서 하는것 
+#1. speaker_all.txt 선택된 음성데이터들의 모든화자의 이름이 담겨있는 파일만들기
+#2. speaker_all.txt에서 랜덤으로 ${nspk_test}(테스트 화자의수) 만큼 뽑아서 speakers_test.txt(테스트 화자이름이 담겨있는 파일) 만들기
+#3. speaker_all.txt(모든화자)와 speakers_test.txt(테스트화자)를 비교해 speakers_train.txt(훈련 화자이름이 담겨있는 파일) 만들기 
+#4. spk2gender.tmp(화자성별정보) 만들기
+#5. wav.scp(음성데이터와 경로를 연결)    구성    파일id / 경로 / 파일이름     파일id와 파일이름의 차이는 파일이름뒤에는 .wav같은것들이 있다.
+#6. utt2spk(발언과 화자를 연결)         구성    발언id / 화자id      발언id는 파일id?   화자id는 화자이름
+#7. trans.txt(음성파일과 각각의 발언을 연결) 구성   파일id / 발언
+#8. spk2utt(화자와 발언을 연결)         구성    화자id / 발언id      
+# spk2utt는 앞에서만든 utt2spk를 거꾸로하면 spk2utt이지만 조금다른형식으로 되어있기때문에 만들어준다.
+
 
 # Prepare ARPA LM and vocabulary using SRILM
 local/voxforge_prepare_lm.sh --order ${lm_order} || exit 1
+#---------- 설명 -------------
+
 
 # Prepare the lexicon and various phone lists
 # Pronunciations for OOV words are obtained using a pre-trained Sequitur model
