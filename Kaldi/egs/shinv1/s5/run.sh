@@ -161,6 +161,7 @@ local/voxforge_prepare_dict.sh || exit 1
 #The Carnegie Mellon University Pronouncing Dictionary은 
 #134,000개 이상의 단어와 그 발음을 포함하고 있는 북미 영어용 오픈 소스 기계 판독이 가능한 발음 사전이다.
 #2. cumdict를 이요해 cmudict-plain.txt(영어 발음사전)를 만든다.
+#3. cmudict-plain.txt 와 vocab-full.txt파일을 이용해 vocab-oov.txt와 lexicon-iv.txt파일을 만든다.
 
 
 # Prepare data/lang and data/local/lang directories
