@@ -160,17 +160,33 @@ local/voxforge_prepare_dict.sh || exit 1
 #1. cumdict를 다운로드 한다.
 #The Carnegie Mellon University Pronouncing Dictionary은 
 #134,000개 이상의 단어와 그 발음을 포함하고 있는 북미 영어용 오픈 소스 기계 판독이 가능한 발음 사전이다.
-#2. cumdict를 이요해 cmudict-plain.txt(영어 발음사전)를 만든다.
-#3. cmudict-plain.txt 와 vocab-full.txt파일을 이용해 vocab-oov.txt와 lexicon-iv.txt파일을 만든다.
 
+#2. cumdict를 이요해 cmudict-plain.txt(영어 발음사전)를 만든다.
+#3. cmudict-plain.txt 와 vocab-full.txt파일을 이용해 vocab-oov.txt(out of vocabulaly와 lexicon-iv.txt파일을 만든다.
+#4. g2p 모델을 다운로드 한다.
+#g2p 모델은 Grapheme to Phoneme의 약자로 문자소로 표현된 단어나 문장을 음소로 변환하는 작업을 의미
+#실제 소리로 문장을 변환할때 각 문자소를 바로 소리로 변환하지 않기 때문에실제 발음 될 음소로 변환하는 작업이 필요하기 때문에 생성
+
+#5. g2p 모델을 이용해 이전에 만들었던 vocab-oov 파일을 lexicon-oov파일로 만든다. 
+#6. lexicon-oov파일과 lexicon-iv파일을 이용해 lexicon.txt 파일을 생성
+#7. silence를 목록에 추가한뒤 silence와 nonsilence를 분리
 
 # Prepare data/lang and data/local/lang directories
 utils/prepare_lang.sh --position-dependent-phones $pos_dep_phones \
   data/local/dict '!SIL' data/local/lang data/lang || exit 1
 
+#---------- 설명 -------------
+#data/lang과 data/local/lang을 준비한다.
+#language model을 만든다.
+
+#------차후 추가 설명 필요 ------
+
 
 # Prepare G.fst and data/{train,test} directories
 local/voxforge_format_data.sh || exit 1
+#---------- 설명 -------------
+#이전에 만들었던 파일들을 train과 test로 나눈다.
+
 
 # Now make MFCC features.
 # mfccdir should be some place with a largish disk where you
@@ -181,6 +197,12 @@ for x in train test; do
    data/$x exp/make_mfcc/$x $mfccdir || exit 1;
  steps/compute_cmvn_stats.sh data/$x exp/make_mfcc/$x $mfccdir || exit 1;
 done
+#---------- 설명 -------------
+#음성의 가장 기본적인 특징벡터인 MFCC를 추출한다.
+#그리고 추출한 MFCC를 cmvn 해준다.
+#cmvn은 음성인식을 위한 정규화 기술 평균 0과 단위 분산을 가지게 한다.
+#노이즈나 다른환경에서 생긴 차이들을 줄여준다.
+
 
 # Train monophone models on a subset of the data
 utils/subset_data_dir.sh data/train 1000 data/train.1k  || exit 1;
