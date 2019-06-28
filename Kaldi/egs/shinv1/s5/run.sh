@@ -207,18 +207,55 @@ done
 # Train monophone models on a subset of the data
 utils/subset_data_dir.sh data/train 1000 data/train.1k  || exit 1;
 steps/train_mono.sh --nj $njobs --cmd "$train_cmd" data/train.1k data/lang exp/mono  || exit 1;
+#---------- 설명 -------------
+#monophone 모델을 훈련시킬것인데 1K 정도의 데이터만 훈련시키기 위해 가지고 있는 데이터중 
+#1K의 데이터만 subset 한다.
+#여기서 필요한 파라미터
+#data/train 원래의 데이터
+#data/train.1K 1K만큼 subset할 경로
+
+#subset을 한 1K의 데이터를 가지고 monophone 훈련을 한다.
+#여기서 필요한 파라미터 
+#$njobs(몇개의 job으로 훈련할지) 
+#$train_cmd(어떤 환경에서 훈련할지 run.pl(개인 컴퓨터))
+#data/train.1K 데이터 위치
+#data/lang 데이터 파일들의 언어 모델 
+#exp/mono 훈련시킨 monophone정보를 담는곳 
+
 
 # Monophone decoding
 utils/mkgraph.sh data/lang_test exp/mono exp/mono/graph || exit 1
 # note: local/decode.sh calls the command line once for each
 # test, and afterwards averages the WERs into (in this case
 # exp/mono/decode/
+#---------- 설명 -------------
+#decoding하기위해서 graph를 만든다.(디코딩을 하기위한 마지막 준비) -> 음성인식에서 graph의미 추가로 적어놓기
+#여기서 필요한 파라미터
+#data/lang_test 테스트 data들의 언어모델
+#exp/mono 그래프 디렉토리가 저장될 디렉토리
+#exp/mono/graph 그래프 정보들이 담길 디렉토리
+
+
 steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   exp/mono/graph data/test exp/mono/decode
+#---------- 설명 -------------
+#준비한 데이터를 가지고 decoding을 한다.
+#여기서 필요한 파라미터
+#conf/decode.config (디코딩을 어떻게 할지에 대한 정보 conf 파일은 여러가지가 있는데 대부분 어떻게 과정을 진행할지가 써있다.)
+#$njobs (몇개의 job으로 훈련할지) 
+#$decode_cmd (추가 설명 필요)
+
+
 
 # Get alignments from monophone system.
 steps/align_si.sh --nj $njobs --cmd "$train_cmd" \
   data/train data/lang exp/mono exp/mono_ali || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+#
+#
+#
+
 
 # train tri1 [first triphone pass]
 steps/train_deltas.sh --cmd "$train_cmd" \
