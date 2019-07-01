@@ -209,7 +209,7 @@ utils/subset_data_dir.sh data/train 1000 data/train.1k  || exit 1;
 steps/train_mono.sh --nj $njobs --cmd "$train_cmd" data/train.1k data/lang exp/mono  || exit 1;
 #---------- 설명 -------------
 #monophone 모델을 훈련시킬것인데 1K 정도의 데이터만 훈련시키기 위해 가지고 있는 데이터중 
-#1K의 데이터만 subset 한다.
+#1K의 데이터만 subset 한다. 다른모델을 구축하기 위한 부트스트랩용 그래서 subset한다.
 #여기서 필요한 파라미터
 #data/train 원래의 데이터
 #data/train.1K 1K만큼 subset할 경로
