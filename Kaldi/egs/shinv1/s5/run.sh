@@ -251,20 +251,37 @@ steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
 steps/align_si.sh --nj $njobs --cmd "$train_cmd" \
   data/train data/lang exp/mono exp/mono_ali || exit 1;
 #---------- 설명 -------------
+#decoding한 데이터를 이용해 alignments를 한다.
 #여기서 필요한 파라미터
-#
-#
-#
-
+#$njobs (몇개의 job으로 훈련할지)
+#$train_cmd(어떤 환경에서 훈련할지 run.pl(개인 컴퓨터))
+#data/train(훈련데이터 위치)
+#data/lang(훈련데이터 언어모델)
+#exp/mono(decoding한 결과 디렉토리)
+#exp/mono_ali(align해서 결과를 저장할 디렉토리)
 
 # train tri1 [first triphone pass]
 steps/train_deltas.sh --cmd "$train_cmd" \
   2000 11000 data/train data/lang exp/mono_ali exp/tri1 || exit 1;
+#---------- 설명 -------------
+#앞에서 훈련과 정렬시킨(monophone) 데이터를 이용해
+#triphone훈련을 한다.
+#여기서 필요한 파라미터
+#$train_cmd(어떤 환경에서 훈련할지 run.pl(개인 컴퓨터))
+#여기서 2000 11000 숫자가 있는데 앞쪽 숫자가 HMM상태수 뒷쪽 숫자가 가우시안의 수에 해당
+#data/train (훈련데이터 위치)
+#data/lang (훈련데이터 언어모델)
+#exp/mono_ali (align한 monophone 데이터 디렉토리)
+#exp/tri1 (새로 저장될 triphone 훈련 결과 디렉토리)
+ 
+#여기부터는 그전에 훈련과정과 거이 일치한다 graph만들고 훈련하고 align시키고
+#다른거는 triphone에다가 input이 조금씩 달라진다.
 
-# decode tri1
 utils/mkgraph.sh data/lang_test exp/tri1 exp/tri1/graph || exit 1;
 steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   exp/tri1/graph data/test exp/tri1/decode
+#---------- 설명 -------------
+#여기서 필요한 파라미터
 
 #draw-tree data/lang/phones.txt exp/tri1/tree | dot -Tps -Gsize=8,10.5 | ps2pdf - tree.pdf
 
@@ -272,15 +289,28 @@ steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
 # align tri1
 steps/align_si.sh --nj $njobs --cmd "$train_cmd" \
   --use-graphs true data/train data/lang exp/tri1 exp/tri1_ali || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # train tri2a [delta+delta-deltas]
 steps/train_deltas.sh --cmd "$train_cmd" 2000 11000 \
   data/train data/lang exp/tri1_ali exp/tri2a || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # decode tri2a
 utils/mkgraph.sh data/lang_test exp/tri2a exp/tri2a/graph
 steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   exp/tri2a/graph data/test exp/tri2a/decode
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
+
 
 # train and decode tri2b [LDA+MLLT]
 steps/train_lda_mllt.sh --cmd "$train_cmd" 2000 11000 \
@@ -288,10 +318,18 @@ steps/train_lda_mllt.sh --cmd "$train_cmd" 2000 11000 \
 utils/mkgraph.sh data/lang_test exp/tri2b exp/tri2b/graph
 steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   exp/tri2b/graph data/test exp/tri2b/decode
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # Align all data with LDA+MLLT system (tri2b)
 steps/align_si.sh --nj $njobs --cmd "$train_cmd" --use-graphs true \
    data/train data/lang exp/tri2b exp/tri2b_ali || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 #  Do MMI on top of LDA+MLLT.
 steps/make_denlats.sh --nj $njobs --cmd "$train_cmd" \
@@ -301,6 +339,10 @@ steps/decode.sh --config conf/decode.config --iter 4 --nj $njobs --cmd "$decode_
    exp/tri2b/graph data/test exp/tri2b_mmi/decode_it4
 steps/decode.sh --config conf/decode.config --iter 3 --nj $njobs --cmd "$decode_cmd" \
    exp/tri2b/graph data/test exp/tri2b_mmi/decode_it3
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # Do the same with boosting.
 steps/train_mmi.sh --boost 0.05 data/train data/lang \
@@ -309,6 +351,10 @@ steps/decode.sh --config conf/decode.config --iter 4 --nj $njobs --cmd "$decode_
    exp/tri2b/graph data/test exp/tri2b_mmi_b0.05/decode_it4 || exit 1;
 steps/decode.sh --config conf/decode.config --iter 3 --nj $njobs --cmd "$decode_cmd" \
    exp/tri2b/graph data/test exp/tri2b_mmi_b0.05/decode_it3 || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # Do MPE.
 steps/train_mpe.sh data/train data/lang exp/tri2b_ali exp/tri2b_denlats exp/tri2b_mpe || exit 1;
@@ -316,6 +362,10 @@ steps/decode.sh --config conf/decode.config --iter 4 --nj $njobs --cmd "$decode_
    exp/tri2b/graph data/test exp/tri2b_mpe/decode_it4 || exit 1;
 steps/decode.sh --config conf/decode.config --iter 3 --nj $njobs --cmd "$decode_cmd" \
    exp/tri2b/graph data/test exp/tri2b_mpe/decode_it3 || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 
 ## Do LDA+MLLT+SAT, and decode.
@@ -323,54 +373,98 @@ steps/train_sat.sh 2000 11000 data/train data/lang exp/tri2b_ali exp/tri3b || ex
 utils/mkgraph.sh data/lang_test exp/tri3b exp/tri3b/graph || exit 1;
 steps/decode_fmllr.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   exp/tri3b/graph data/test exp/tri3b/decode || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 
 # Align all data with LDA+MLLT+SAT system (tri3b)
 steps/align_fmllr.sh --nj $njobs --cmd "$train_cmd" --use-graphs true \
   data/train data/lang exp/tri3b exp/tri3b_ali || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 ## MMI on top of tri3b (i.e. LDA+MLLT+SAT+MMI)
 steps/make_denlats.sh --config conf/decode.config \
    --nj $njobs --cmd "$train_cmd" --transform-dir exp/tri3b_ali \
   data/train data/lang exp/tri3b exp/tri3b_denlats || exit 1;
 steps/train_mmi.sh data/train data/lang exp/tri3b_ali exp/tri3b_denlats exp/tri3b_mmi || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 steps/decode_fmllr.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   --alignment-model exp/tri3b/final.alimdl --adapt-model exp/tri3b/final.mdl \
    exp/tri3b/graph data/test exp/tri3b_mmi/decode || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # Do a decoding that uses the exp/tri3b/decode directory to get transforms from.
 steps/decode.sh --config conf/decode.config --nj $njobs --cmd "$decode_cmd" \
   --transform-dir exp/tri3b/decode  exp/tri3b/graph data/test exp/tri3b_mmi/decode2 || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 
 #first, train UBM for fMMI experiments.
 steps/train_diag_ubm.sh --silence-weight 0.5 --nj $njobs --cmd "$train_cmd" \
   250 data/train data/lang exp/tri3b_ali exp/dubm3b
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # Next, various fMMI+MMI configurations.
 steps/train_mmi_fmmi.sh --learning-rate 0.0025 \
   --boost 0.1 --cmd "$train_cmd" data/train data/lang exp/tri3b_ali exp/dubm3b exp/tri3b_denlats \
   exp/tri3b_fmmi_b || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 for iter in 3 4 5 6 7 8; do
  steps/decode_fmmi.sh --nj $njobs --config conf/decode.config --cmd "$decode_cmd" --iter $iter \
    --transform-dir exp/tri3b/decode  exp/tri3b/graph data/test exp/tri3b_fmmi_b/decode_it$iter &
 done
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 steps/train_mmi_fmmi.sh --learning-rate 0.001 \
   --boost 0.1 --cmd "$train_cmd" data/train data/lang exp/tri3b_ali exp/dubm3b exp/tri3b_denlats \
   exp/tri3b_fmmi_c || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 for iter in 3 4 5 6 7 8; do
  steps/decode_fmmi.sh --nj $njobs --config conf/decode.config --cmd "$decode_cmd" --iter $iter \
    --transform-dir exp/tri3b/decode  exp/tri3b/graph data/test exp/tri3b_fmmi_c/decode_it$iter &
 done
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 # for indirect one, use twice the learning rate.
 steps/train_mmi_fmmi_indirect.sh --learning-rate 0.002 --schedule "fmmi fmmi fmmi fmmi mmi mmi mmi mmi" \
   --boost 0.1 --cmd "$train_cmd" data/train data/lang exp/tri3b_ali exp/dubm3b exp/tri3b_denlats \
   exp/tri3b_fmmi_d || exit 1;
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 
 
@@ -378,6 +472,10 @@ for iter in 3 4 5 6 7 8; do
  steps/decode_fmmi.sh --nj $njobs --config conf/decode.config --cmd "$decode_cmd" --iter $iter \
    --transform-dir exp/tri3b/decode  exp/tri3b/graph data/test exp/tri3b_fmmi_d/decode_it$iter &
 done
+#---------- 설명 -------------
+#여기서 필요한 파라미터
+
+
 
 local/run_sgmm2.sh --nj $njobs
 
