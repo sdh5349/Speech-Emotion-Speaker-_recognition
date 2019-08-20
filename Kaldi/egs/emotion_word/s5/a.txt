@@ -1,0 +1,2 @@
+LOG (lattice-best-path[5.5.52~1405-6d919]:main():lattice-best-path.cc:99) For utterance 01r6020005Child-20150612-Korean-01r6020005Child_0001, best cost 559 + -2049.59 = -1490.59 over 98 frames.
+01r6020005Child-20150612-Korean-01r6020005Child_0001 서울 강남구 
