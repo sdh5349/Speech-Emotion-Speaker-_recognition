@@ -1,0 +1,146 @@
+digraph nnet3graph {
+ivector [ label="ivector\ndim=100"]
+input [ label="input\ndim=13"]
+input->Append_lda:Append_ldaOffset0 [ label="Offset (-1)" ]
+input->Append_lda:Append_ldaOffset1 [ label="Offset (1)" ]
+ivector->Append_lda:Append_ldaReplaceIndex2 [label="ReplaceIndex(t, 0)"]
+input -> Append_lda:Append_ldainput3
+Append_lda [shape=Mrecord, label="{{<Append_ldaOffset0> part 0|<Append_ldaOffset1> part 1|<Append_ldaReplaceIndex2> part 2|<Append_ldainput3> part 3}|Append}"];
+Append_lda -> lda [tailport=s]
+lda [ label="lda", shape=box ]
+ldalda_component -> lda [ weight=10 ]
+lda -> tdnn1_dot_affine
+tdnn1_dot_affine [ label="tdnn1.affine", shape=box ]
+tdnn1_dot_affinetdnn1_dot_affine_component -> tdnn1_dot_affine [ weight=10 ]
+tdnn1_dot_affine -> tdnn1_dot_relu
+tdnn1_dot_relu [ label="tdnn1.relu", shape=box ]
+tdnn1_dot_relutdnn1_dot_relu_component -> tdnn1_dot_relu [ weight=10 ]
+tdnn1_dot_relu -> tdnn1_dot_batchnorm
+tdnn1_dot_batchnorm [ label="tdnn1.batchnorm", shape=box ]
+tdnn1_dot_batchnormtdnn1_dot_batchnorm_component -> tdnn1_dot_batchnorm [ weight=10 ]
+tdnn1_dot_batchnorm->Append_tdnn2_dot_affine:Append_tdnn2_dot_affineOffset0 [ label="Offset (-1)" ]
+tdnn1_dot_batchnorm->Append_tdnn2_dot_affine:Append_tdnn2_dot_affineOffset1 [ label="Offset (1)" ]
+tdnn1_dot_batchnorm->Append_tdnn2_dot_affine:Append_tdnn2_dot_affineOffset2 [ label="Offset (2)" ]
+tdnn1_dot_batchnorm -> Append_tdnn2_dot_affine:Append_tdnn2_dot_affinetdnn1_dot_batchnorm3
+Append_tdnn2_dot_affine [shape=Mrecord, label="{{<Append_tdnn2_dot_affineOffset0> part 0|<Append_tdnn2_dot_affineOffset1> part 1|<Append_tdnn2_dot_affineOffset2> part 2|<Append_tdnn2_dot_affinetdnn1_dot_batchnorm3> part 3}|Append}"];
+Append_tdnn2_dot_affine -> tdnn2_dot_affine [tailport=s]
+tdnn2_dot_affine [ label="tdnn2.affine", shape=box ]
+tdnn2_dot_affinetdnn2_dot_affine_component -> tdnn2_dot_affine [ weight=10 ]
+tdnn2_dot_affine -> tdnn2_dot_relu
+tdnn2_dot_relu [ label="tdnn2.relu", shape=box ]
+tdnn2_dot_relutdnn2_dot_relu_component -> tdnn2_dot_relu [ weight=10 ]
+tdnn2_dot_relu -> tdnn2_dot_batchnorm
+tdnn2_dot_batchnorm [ label="tdnn2.batchnorm", shape=box ]
+tdnn2_dot_batchnormtdnn2_dot_batchnorm_component -> tdnn2_dot_batchnorm [ weight=10 ]
+tdnn2_dot_batchnorm->Append_tdnn3_dot_affine:Append_tdnn3_dot_affineOffset0 [ label="Offset (-3)" ]
+tdnn2_dot_batchnorm->Append_tdnn3_dot_affine:Append_tdnn3_dot_affineOffset1 [ label="Offset (3)" ]
+tdnn2_dot_batchnorm -> Append_tdnn3_dot_affine:Append_tdnn3_dot_affinetdnn2_dot_batchnorm2
+Append_tdnn3_dot_affine [shape=Mrecord, label="{{<Append_tdnn3_dot_affineOffset0> part 0|<Append_tdnn3_dot_affineOffset1> part 1|<Append_tdnn3_dot_affinetdnn2_dot_batchnorm2> part 2}|Append}"];
+Append_tdnn3_dot_affine -> tdnn3_dot_affine [tailport=s]
+tdnn3_dot_affine [ label="tdnn3.affine", shape=box ]
+tdnn3_dot_affinetdnn3_dot_affine_component -> tdnn3_dot_affine [ weight=10 ]
+tdnn3_dot_affine -> tdnn3_dot_relu
+tdnn3_dot_relu [ label="tdnn3.relu", shape=box ]
+tdnn3_dot_relutdnn3_dot_relu_component -> tdnn3_dot_relu [ weight=10 ]
+tdnn3_dot_relu -> tdnn3_dot_batchnorm
+tdnn3_dot_batchnorm [ label="tdnn3.batchnorm", shape=box ]
+tdnn3_dot_batchnormtdnn3_dot_batchnorm_component -> tdnn3_dot_batchnorm [ weight=10 ]
+tdnn3_dot_batchnorm->Append_tdnn4_dot_affine:Append_tdnn4_dot_affineOffset0 [ label="Offset (-3)" ]
+tdnn3_dot_batchnorm->Append_tdnn4_dot_affine:Append_tdnn4_dot_affineOffset1 [ label="Offset (3)" ]
+tdnn3_dot_batchnorm -> Append_tdnn4_dot_affine:Append_tdnn4_dot_affinetdnn3_dot_batchnorm2
+Append_tdnn4_dot_affine [shape=Mrecord, label="{{<Append_tdnn4_dot_affineOffset0> part 0|<Append_tdnn4_dot_affineOffset1> part 1|<Append_tdnn4_dot_affinetdnn3_dot_batchnorm2> part 2}|Append}"];
+Append_tdnn4_dot_affine -> tdnn4_dot_affine [tailport=s]
+tdnn4_dot_affine [ label="tdnn4.affine", shape=box ]
+tdnn4_dot_affinetdnn4_dot_affine_component -> tdnn4_dot_affine [ weight=10 ]
+tdnn4_dot_affine -> tdnn4_dot_relu
+tdnn4_dot_relu [ label="tdnn4.relu", shape=box ]
+tdnn4_dot_relutdnn4_dot_relu_component -> tdnn4_dot_relu [ weight=10 ]
+tdnn4_dot_relu -> tdnn4_dot_batchnorm
+tdnn4_dot_batchnorm [ label="tdnn4.batchnorm", shape=box ]
+tdnn4_dot_batchnormtdnn4_dot_batchnorm_component -> tdnn4_dot_batchnorm [ weight=10 ]
+tdnn4_dot_batchnorm->Append_tdnn5_dot_affine:Append_tdnn5_dot_affineOffset0 [ label="Offset (-3)" ]
+tdnn4_dot_batchnorm->Append_tdnn5_dot_affine:Append_tdnn5_dot_affineOffset1 [ label="Offset (3)" ]
+tdnn4_dot_batchnorm -> Append_tdnn5_dot_affine:Append_tdnn5_dot_affinetdnn4_dot_batchnorm2
+Append_tdnn5_dot_affine [shape=Mrecord, label="{{<Append_tdnn5_dot_affineOffset0> part 0|<Append_tdnn5_dot_affineOffset1> part 1|<Append_tdnn5_dot_affinetdnn4_dot_batchnorm2> part 2}|Append}"];
+Append_tdnn5_dot_affine -> tdnn5_dot_affine [tailport=s]
+tdnn5_dot_affine [ label="tdnn5.affine", shape=box ]
+tdnn5_dot_affinetdnn5_dot_affine_component -> tdnn5_dot_affine [ weight=10 ]
+tdnn5_dot_affine -> tdnn5_dot_relu
+tdnn5_dot_relu [ label="tdnn5.relu", shape=box ]
+tdnn5_dot_relutdnn5_dot_relu_component -> tdnn5_dot_relu [ weight=10 ]
+tdnn5_dot_relu -> tdnn5_dot_batchnorm
+tdnn5_dot_batchnorm [ label="tdnn5.batchnorm", shape=box ]
+tdnn5_dot_batchnormtdnn5_dot_batchnorm_component -> tdnn5_dot_batchnorm [ weight=10 ]
+tdnn5_dot_batchnorm->Append_tdnn6_dot_affine:Append_tdnn6_dot_affineOffset0 [ label="Offset (-6)" ]
+tdnn5_dot_batchnorm->Append_tdnn6_dot_affine:Append_tdnn6_dot_affineOffset1 [ label="Offset (-3)" ]
+tdnn5_dot_batchnorm -> Append_tdnn6_dot_affine:Append_tdnn6_dot_affinetdnn5_dot_batchnorm2
+Append_tdnn6_dot_affine [shape=Mrecord, label="{{<Append_tdnn6_dot_affineOffset0> part 0|<Append_tdnn6_dot_affineOffset1> part 1|<Append_tdnn6_dot_affinetdnn5_dot_batchnorm2> part 2}|Append}"];
+Append_tdnn6_dot_affine -> tdnn6_dot_affine [tailport=s]
+tdnn6_dot_affine [ label="tdnn6.affine", shape=box ]
+tdnn6_dot_affinetdnn6_dot_affine_component -> tdnn6_dot_affine [ weight=10 ]
+tdnn6_dot_affine -> tdnn6_dot_relu
+tdnn6_dot_relu [ label="tdnn6.relu", shape=box ]
+tdnn6_dot_relutdnn6_dot_relu_component -> tdnn6_dot_relu [ weight=10 ]
+tdnn6_dot_relu -> tdnn6_dot_batchnorm
+tdnn6_dot_batchnorm [ label="tdnn6.batchnorm", shape=box ]
+tdnn6_dot_batchnormtdnn6_dot_batchnorm_component -> tdnn6_dot_batchnorm [ weight=10 ]
+tdnn6_dot_batchnorm -> prefinalhyphenchain_dot_affine
+prefinalhyphenchain_dot_affine [ label="prefinal-chain.affine", shape=box ]
+prefinalhyphenchain_dot_affineprefinalhyphenchain_dot_affine_component -> prefinalhyphenchain_dot_affine [ weight=10 ]
+prefinalhyphenchain_dot_affine -> prefinalhyphenchain_dot_relu
+prefinalhyphenchain_dot_relu [ label="prefinal-chain.relu", shape=box ]
+prefinalhyphenchain_dot_reluprefinalhyphenchain_dot_relu_component -> prefinalhyphenchain_dot_relu [ weight=10 ]
+prefinalhyphenchain_dot_relu -> prefinalhyphenchain_dot_batchnorm
+prefinalhyphenchain_dot_batchnorm [ label="prefinal-chain.batchnorm", shape=box ]
+prefinalhyphenchain_dot_batchnormprefinalhyphenchain_dot_batchnorm_component -> prefinalhyphenchain_dot_batchnorm [ weight=10 ]
+prefinalhyphenchain_dot_batchnorm -> output_dot_affine
+output_dot_affine [ label="output.affine", shape=box ]
+output_dot_affineoutput_dot_affine_component -> output_dot_affine [ weight=10 ]
+output_dot_affine -> output
+output [ label="output\nobjective=linear"]
+tdnn6_dot_batchnorm -> prefinalhyphenxent_dot_affine
+prefinalhyphenxent_dot_affine [ label="prefinal-xent.affine", shape=box ]
+prefinalhyphenxent_dot_affineprefinalhyphenxent_dot_affine_component -> prefinalhyphenxent_dot_affine [ weight=10 ]
+prefinalhyphenxent_dot_affine -> prefinalhyphenxent_dot_relu
+prefinalhyphenxent_dot_relu [ label="prefinal-xent.relu", shape=box ]
+prefinalhyphenxent_dot_reluprefinalhyphenxent_dot_relu_component -> prefinalhyphenxent_dot_relu [ weight=10 ]
+prefinalhyphenxent_dot_relu -> prefinalhyphenxent_dot_batchnorm
+prefinalhyphenxent_dot_batchnorm [ label="prefinal-xent.batchnorm", shape=box ]
+prefinalhyphenxent_dot_batchnormprefinalhyphenxent_dot_batchnorm_component -> prefinalhyphenxent_dot_batchnorm [ weight=10 ]
+prefinalhyphenxent_dot_batchnorm -> outputhyphenxent_dot_affine
+outputhyphenxent_dot_affine [ label="output-xent.affine", shape=box ]
+outputhyphenxent_dot_affineoutputhyphenxent_dot_affine_component -> outputhyphenxent_dot_affine [ weight=10 ]
+outputhyphenxent_dot_affine -> outputhyphenxent_dot_loghyphensoftmax
+outputhyphenxent_dot_loghyphensoftmax [ label="output-xent.log-softmax", shape=box ]
+outputhyphenxent_dot_loghyphensoftmaxoutputhyphenxent_dot_loghyphensoftmax_component -> outputhyphenxent_dot_loghyphensoftmax [ weight=10 ]
+outputhyphenxent_dot_loghyphensoftmax -> outputhyphenxent
+outputhyphenxent [ label="output-xent\nobjective=linear"]
+ldalda_component [label="input-dim = 139\noutput-dim = 139\ntype = FixedAffineComponent\nname = lda\n"  color=darkolivegreen1  shape=box  style=filled ]
+tdnn1_dot_affinetdnn1_dot_affine_component [label="input-dim = 139\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = tdnn1.affine\n"  color=lightgrey  shape=box  style=filled ]
+tdnn1_dot_relutdnn1_dot_relu_component [label="type = RectifiedLinearComponent\nname = tdnn1.relu\n"  color=bisque  shape=rectangle  style=filled ]
+tdnn1_dot_batchnormtdnn1_dot_batchnorm_component [label="type = BatchNormComponent\nname = tdnn1.batchnorm\n" ]
+tdnn2_dot_affinetdnn2_dot_affine_component [label="input-dim = 2900\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = tdnn2.affine\n"  color=lightgrey  shape=box  style=filled ]
+tdnn2_dot_relutdnn2_dot_relu_component [label="type = RectifiedLinearComponent\nname = tdnn2.relu\n"  color=bisque  shape=rectangle  style=filled ]
+tdnn2_dot_batchnormtdnn2_dot_batchnorm_component [label="type = BatchNormComponent\nname = tdnn2.batchnorm\n" ]
+tdnn3_dot_affinetdnn3_dot_affine_component [label="input-dim = 2175\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = tdnn3.affine\n"  color=lightgrey  shape=box  style=filled ]
+tdnn3_dot_relutdnn3_dot_relu_component [label="type = RectifiedLinearComponent\nname = tdnn3.relu\n"  color=bisque  shape=rectangle  style=filled ]
+tdnn3_dot_batchnormtdnn3_dot_batchnorm_component [label="type = BatchNormComponent\nname = tdnn3.batchnorm\n" ]
+tdnn4_dot_affinetdnn4_dot_affine_component [label="input-dim = 2175\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = tdnn4.affine\n"  color=lightgrey  shape=box  style=filled ]
+tdnn4_dot_relutdnn4_dot_relu_component [label="type = RectifiedLinearComponent\nname = tdnn4.relu\n"  color=bisque  shape=rectangle  style=filled ]
+tdnn4_dot_batchnormtdnn4_dot_batchnorm_component [label="type = BatchNormComponent\nname = tdnn4.batchnorm\n" ]
+tdnn5_dot_affinetdnn5_dot_affine_component [label="input-dim = 2175\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = tdnn5.affine\n"  color=lightgrey  shape=box  style=filled ]
+tdnn5_dot_relutdnn5_dot_relu_component [label="type = RectifiedLinearComponent\nname = tdnn5.relu\n"  color=bisque  shape=rectangle  style=filled ]
+tdnn5_dot_batchnormtdnn5_dot_batchnorm_component [label="type = BatchNormComponent\nname = tdnn5.batchnorm\n" ]
+tdnn6_dot_affinetdnn6_dot_affine_component [label="input-dim = 2175\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = tdnn6.affine\n"  color=lightgrey  shape=box  style=filled ]
+tdnn6_dot_relutdnn6_dot_relu_component [label="type = RectifiedLinearComponent\nname = tdnn6.relu\n"  color=bisque  shape=rectangle  style=filled ]
+tdnn6_dot_batchnormtdnn6_dot_batchnorm_component [label="type = BatchNormComponent\nname = tdnn6.batchnorm\n" ]
+prefinalhyphenchain_dot_affineprefinalhyphenchain_dot_affine_component [label="input-dim = 725\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = prefinal-chain.affine\n"  color=lightgrey  shape=box  style=filled ]
+prefinalhyphenchain_dot_reluprefinalhyphenchain_dot_relu_component [label="type = RectifiedLinearComponent\nname = prefinal-chain.relu\n"  color=bisque  shape=rectangle  style=filled ]
+prefinalhyphenchain_dot_batchnormprefinalhyphenchain_dot_batchnorm_component [label="type = BatchNormComponent\nname = prefinal-chain.batchnorm\n" ]
+output_dot_affineoutput_dot_affine_component [label="input-dim = 725\noutput-dim = 1016\ntype = NaturalGradientAffineComponent\nname = output.affine\n"  color=lightgrey  shape=box  style=filled ]
+prefinalhyphenxent_dot_affineprefinalhyphenxent_dot_affine_component [label="input-dim = 725\noutput-dim = 725\ntype = NaturalGradientAffineComponent\nname = prefinal-xent.affine\n"  color=lightgrey  shape=box  style=filled ]
+prefinalhyphenxent_dot_reluprefinalhyphenxent_dot_relu_component [label="type = RectifiedLinearComponent\nname = prefinal-xent.relu\n"  color=bisque  shape=rectangle  style=filled ]
+prefinalhyphenxent_dot_batchnormprefinalhyphenxent_dot_batchnorm_component [label="type = BatchNormComponent\nname = prefinal-xent.batchnorm\n" ]
+outputhyphenxent_dot_affineoutputhyphenxent_dot_affine_component [label="input-dim = 725\noutput-dim = 1016\ntype = NaturalGradientAffineComponent\nname = output-xent.affine\n"  color=lightgrey  shape=box  style=filled ]
+outputhyphenxent_dot_loghyphensoftmaxoutputhyphenxent_dot_loghyphensoftmax_component [label="type = LogSoftmaxComponent\nname = output-xent.log-softmax\n"  color=cyan  shape=rectangle  style=filled ]
+}

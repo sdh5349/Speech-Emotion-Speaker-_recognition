@@ -1,0 +1,30 @@
+# acc-tree-stats --ci-phones=1:2:3:4:5 exp/tri2b_ali/final.mdl "ark,s,cs:apply-cmvn  --utt2spk=ark:data/train/split8/6/utt2spk scp:data/train/split8/6/cmvn.scp scp:data/train/split8/6/feats.scp ark:- | splice-feats  ark:- ark:- | transform-feats exp/tri2b_ali/final.mat ark:- ark:- | transform-feats --utt2spk=ark:data/train/split8/6/utt2spk ark,s,cs:exp/tri3b/trans.6 ark:- ark:- |" "ark:gunzip -c exp/tri2b_ali/ali.6.gz|" exp/tri3b/6.treeacc 
+# Started at Tue May  7 15:58:35 KST 2019
+#
+acc-tree-stats --ci-phones=1:2:3:4:5 exp/tri2b_ali/final.mdl 'ark,s,cs:apply-cmvn  --utt2spk=ark:data/train/split8/6/utt2spk scp:data/train/split8/6/cmvn.scp scp:data/train/split8/6/feats.scp ark:- | splice-feats  ark:- ark:- | transform-feats exp/tri2b_ali/final.mat ark:- ark:- | transform-feats --utt2spk=ark:data/train/split8/6/utt2spk ark,s,cs:exp/tri3b/trans.6 ark:- ark:- |' 'ark:gunzip -c exp/tri2b_ali/ali.6.gz|' exp/tri3b/6.treeacc 
+splice-feats ark:- ark:- 
+apply-cmvn --utt2spk=ark:data/train/split8/6/utt2spk scp:data/train/split8/6/cmvn.scp scp:data/train/split8/6/feats.scp ark:- 
+transform-feats exp/tri2b_ali/final.mat ark:- ark:- 
+transform-feats --utt2spk=ark:data/train/split8/6/utt2spk ark,s,cs:exp/tri3b/trans.6 ark:- ark:- 
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 1000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 2000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 3000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 4000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 5000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 6000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 7000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 8000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 9000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 10000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 11000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 12000 utterances.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:101) Processed 13000 utterances.
+LOG (apply-cmvn[5.5.52-6d919]:main():apply-cmvn.cc:162) Applied cepstral mean normalization to 13664 utterances, errors on 0
+LOG (transform-feats[5.5.52-6d919]:main():transform-feats.cc:158) Overall average [pseudo-]logdet is -92.5347 over 2.21597e+06 frames.
+LOG (transform-feats[5.5.52-6d919]:main():transform-feats.cc:161) Applied transform to 13664 utterances; 0 had errors.
+LOG (transform-feats[5.5.52-6d919]:main():transform-feats.cc:158) Overall average logdet is 1.3456 over 2.21597e+06 frames.
+LOG (transform-feats[5.5.52-6d919]:main():transform-feats.cc:161) Applied transform to 13664 utterances; 0 had errors.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:118) Accumulated stats for 13664 files, 0 failed due to no alignment, 0 failed for other reasons.
+LOG (acc-tree-stats[5.5.52-6d919]:main():acc-tree-stats.cc:121) Number of separate stats (context-dependent states) is 6158
+# Accounting: time=10 threads=1
+# Ended (code 0) at Tue May  7 15:58:45 KST 2019, elapsed time 10 seconds
