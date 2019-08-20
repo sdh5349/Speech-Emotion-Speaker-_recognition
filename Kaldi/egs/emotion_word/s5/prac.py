@@ -52,7 +52,7 @@ def get_feature_vector_from_mfcc(file_path: str, flatten: bool,
 ### 문자출력 + 문자수 출력  ###
 L=[]
 text=[]
-file=open('/data/untitled/a.txt','r')
+file=open('./a.txt','r')
 while (1):
     line=file.readline()
 
@@ -93,7 +93,7 @@ for i in range(0, len(spacing)):
 print(spacing)
 print(len(spacing))
 
-samplerate, data = sio.wavfile.read('/data/untitled/online_wav/base/01r6020005Child-20150612-Korean/wav/01r6020005Child_0001.wav')
+samplerate, data = sio.wavfile.read('./01r6020005Child_0001.wav')
 
 data_s=data # 기본 파장 
 plt.subplot(6,1,1)
@@ -214,7 +214,7 @@ for i in range(0, num_spacing):
 
 mean_signal_length=32000
 to_flatten=True
-signal=get_feature_vector_from_mfcc('/data/untitled/online_wav/base/01r6020005Child-20150612-Korean/wav/01r6020005Child_0001.wav', flatten=to_flatten)
+signal=get_feature_vector_from_mfcc('./01r6020005Child_0001.wav', flatten=to_flatten)
 
 img_rows = 398
 img_cols = 39
@@ -229,9 +229,6 @@ emotion=model.predict_classes(signal)
 print("0:Angry, 1:Happy, 2:Neutral, 3:Sad, 4:Disgust, 5:Lasy, 6:Scared") 
 print(emotion)
 
-
-
-emotion = 6
 
 
 if emotion == 0:
