@@ -1,1 +1,1 @@
-텐서플로우 케라스 공부 정리 + kaldi 입니다.
+speech recognize + emotion_word
