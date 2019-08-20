@@ -1,1 +1,1 @@
-speech recognize + emotion_word
+speech recognize + speech verification + emotion_word
