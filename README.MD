@@ -13,3 +13,7 @@
 ## 화자인식(Speech Verification)
 
 ## 감정문자(Emotion_Word)
+
+<img src="/img/Emotion_Word1.png" width="60%">  
+
+<img src="/img/Emotion_Word2.png" width="60%">  
