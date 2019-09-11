@@ -1,5 +1,5 @@
 # Shin's speech project
-speech recognize + speech verification + emotion_word
+Speech Recognize + Speech Verification + Emotion_Word
 
 ## speech recognize
 
