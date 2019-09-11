@@ -1,5 +1,5 @@
 # Shin's speech project
-* kaldi에 기반한  
+kaldi에 기반한  
 * 음성인식(Speech Recognize)  
 * 화자인식(Speech Verification)  
 * 감정문자(Emotion_Word)  
