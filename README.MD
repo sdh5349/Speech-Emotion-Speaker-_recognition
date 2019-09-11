@@ -1,8 +1,8 @@
 # Shin's speech project
-Speech Recognize + Speech Verification + Emotion_Word
+음성인식(Speech Recognize) + 화자인식(Speech Verification) + 감정문자(Emotion_Word)
 
-## speech recognize
+## 음성인식(Speech Recognize)
 
-## speech verification
+## 화자인식(Speech Verification)
 
-## emotion_word
+## 감정문자(Emotion_Word)
